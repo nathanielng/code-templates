@@ -6,3 +6,5 @@
 
 - **Date**: Friday 31 March, 2017
 
+- **Version**: 0.0.1
+
