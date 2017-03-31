@@ -5,3 +5,6 @@
   will be added later.
 
 - **Date**: 31 March, 2017
+
+- **Functions**: file permissions, file size
+
