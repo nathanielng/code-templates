@@ -8,3 +8,5 @@
 
 - **Version**: 0.0.1
 
+- **Functions**: file permissions, file size
+
