@@ -23,13 +23,14 @@ int main(int argc, char *argv[]) {
 
     if (argc <= 1) {
         printf("Usage: %s [arguments]\n", argv[0]);
-         return EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
 
     t0 = clock();
     printf("Hello World!\n");
     if (file_is_readable(argv[1])) {
         printf("Input File = '%s'\n", argv[1]);
+        printf("File size is %lld\n", get_file_size(argv[1]));
     } else {
         printf("Input File = '%s' (file does not exist or read permissions absent)\n", argv[1]);
     }
