@@ -3,6 +3,12 @@
 #include <time.h>
 #include <unistd.h>
 #include <errno.h>
+#include <sys/stat.h>
+
+off_t get_file_size(const char *filename) {
+    struct stat buffer;
+    return (stat(filename, &buffer)==0 ? buffer.st_size : -1);
+}
 
 int file_is_readable(char *filename) {
     if ( access(filename, R_OK) != -1 ) {
