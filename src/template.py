@@ -9,6 +9,27 @@ from __future__ import unicode_literals
 import os
 import argparse
 
+def run_shell_command(cmd,redirect='stdout'):
+    cmd_list=cmd.split()
+    if redirect is None or redirect=='null':
+        try:
+            from subprocess import DEVNULL  # py3k
+        except ImportError:
+            DEVNULL = open(os.devnull, 'wb')
+        server = subprocess.Popen(cmd_list,shell=False,
+                 stdout=DEVNULL,stderr=DEVNULL)
+    else:
+        server = subprocess.Popen(cmd_list,shell=False,
+                 stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+
+    out,err = server.communicate()
+    if out:
+        print(out)
+    if err:
+        print(err)
+    exit_code=server.returncode
+    return out,err,exit_code
+
 def main(filename=None):
     print("Hello world!")
     if os.path.isfile(filename) is not True:
