@@ -4,6 +4,24 @@ if [[ -z "$1" ]]; then
     exit 1
 fi
 
+file="$1"
+if [[ -f "$file" ]]; then
+    file_path="${file%/*}"
+    file_name="${file##*/}"
+    base_name="${file_name%.*}"
+    extension="${file_name##*.}"
+    if [[ "$file_path" = "$file" ]]; then
+        file_path=""
+    fi
+    echo "File path=${file_path}"
+    echo "Filename =${file_name}"
+    echo "Basename =${base_name}"
+    echo "Extension=${extension}"
+fi
+
+home_folder=${PWD}
+folder_root="${PWD##*/}"
+
 function get_yes_no() {
     #  $1 - prompt
     #  $2 - default response
