@@ -6,29 +6,37 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
 import argparse
+import os
+import subprocess
 
 def run_shell_command(cmd,redirect='stdout'):
+    """
+    redirect=
+        null   - redirect to null
+        stdout - save output & print to screen
+        *      - save output but do not print to screen
+    """
     cmd_list=cmd.split()
-    if redirect is None or redirect=='null':
+    if redirect=='null':
         try:
-            from subprocess import DEVNULL  # py3k
+            from subprocess import DEVNULL  # Python 3.3+
         except ImportError:
             DEVNULL = open(os.devnull, 'wb')
-        server = subprocess.Popen(cmd_list,shell=False,
-                 stdout=DEVNULL,stderr=DEVNULL)
+        process = subprocess.Popen(cmd_list,shell=False,
+                  stdout=DEVNULL,stderr=DEVNULL)
+        process.communicate()
+        return '','',process.returncode
     else:
-        server = subprocess.Popen(cmd_list,shell=False,
-                 stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-
-    out,err = server.communicate()
-    if out:
-        print(out)
-    if err:
-        print(err)
-    exit_code=server.returncode
-    return out,err,exit_code
+        process = subprocess.Popen(cmd_list,shell=False,
+                  stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        out,err = process.communicate()
+        if redirect=='stdout':
+            if out:
+                print(out.decode())
+            if err:
+                print(err.decode())
+        return out.decode(),err.decode(),process.returncode
 
 def main(filename=None):
     print("Hello world!")
@@ -39,7 +47,7 @@ def main(filename=None):
     print("Input File = '{}'{}".format(filename,file_status))
 
     _, file_ext = os.path.splitext(filename)
-    if not file_ext in ['.txt','.text']:
+    if file_ext not in ['.txt','.text']:
         print("File extension '{}' is invalid".format(file_ext))
 
 if __name__ == "__main__":
