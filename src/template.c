@@ -19,6 +19,8 @@ int file_is_readable(char *filename) {
 }
 
 int main(int argc, char *argv[]) {
+    const char msg[] = "Hello world!";
+    off_t file_size;
     clock_t t0, t1;
 
     if (argc <= 1) {
@@ -27,10 +29,15 @@ int main(int argc, char *argv[]) {
     }
 
     t0 = clock();
-    printf("Hello World!\n");
+    fprintf(stdout,"%s\n",msg);
     if (file_is_readable(argv[1])) {
         printf("Input File = '%s'\n", argv[1]);
-        printf("File size is %lld\n", get_file_size(argv[1]));
+        file_size = get_file_size(argv[1]);
+        if (file_size==-1) {
+            printf("Failed to obtain file size\n");
+        } else {
+            printf("File size is %lld bytes\n", file_size);
+        }
     } else {
         printf("Input File = '%s' (file does not exist or read permissions absent)\n", argv[1]);
     }
