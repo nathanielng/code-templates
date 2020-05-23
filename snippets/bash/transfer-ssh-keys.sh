@@ -54,7 +54,7 @@ else
 fi
 
 server="$2"
-get_yes_no "Transfer ~/.ssh/id_rsa.pub ${op} ${server}? "
+get_yes_no "Transfer ~/.ssh/id_rsa.pub ${op} ${server}? [y/n]"
 if [[ "$?" -eq 0 ]]; then
     exit
 fi
@@ -68,13 +68,12 @@ if [ "$op" = "to" ]; then
         ssh-keygen -t rsa
     fi
     
-    if [ "$2" = "safe" ]; then
+    if [ "$3" = "safe" ]; then
         ssh ${server} \
             "mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
-    else
-        echo "cat id_rsa.pub | ssh ${server} \"cat >>  ~/.ssh/authorized_keys\""
-        cat id_rsa.pub | ssh ${server} "cat >>  ~/.ssh/authorized_keys"
     fi
+    echo "cat id_rsa.pub | ssh ${server} \"cat >>  ~/.ssh/authorized_keys\""
+    cat id_rsa.pub | ssh ${server} "cat >>  ~/.ssh/authorized_keys"
 elif [ "$op" = "from" ]; then
     rsync -av ${server}:.ssh/id_rsa.pub .
     if [ -e "id_rsa.pub" ]; then
